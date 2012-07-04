@@ -75,6 +75,7 @@ static KIFTestScenario* currentScenario = nil;
 
 - (void)_init;
 {
+    NSLog(@"JUNIT XML LOGGING INIT");
     if (durations == nil) {
         durations = [[NSMutableDictionary alloc] init];
     }
