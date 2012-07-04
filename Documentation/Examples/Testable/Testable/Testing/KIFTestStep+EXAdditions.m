@@ -8,6 +8,7 @@
 //  which Square, Inc. licenses this file to you.
 
 #import "KIFTestStep+EXAdditions.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation KIFTestStep (EXAdditions)
 
@@ -39,6 +40,43 @@
     [steps addObject:[KIFTestStep stepToTapViewWithAccessibilityLabel:@"I already have an account."]];
     
     return steps;
+}
+
++ (id)stepToTakeScreenshot:(NSString *)name;
+{
+    
+    NSString *description = nil;
+    if (name.length) {
+        description = [NSString stringWithFormat:@"Taking screenshot \"%@\"", name];
+    } else {
+        description = [NSString stringWithFormat:@"Taking screenshot"];
+    }
+    return [self stepWithDescription:description executionBlock:^(KIFTestStep *step, NSError **error) {
+    NSString *outputPath = [[[NSProcessInfo processInfo] environment] objectForKey:@"KIF_SCREENSHOTS"];
+    if (!outputPath) {
+        KIFTestCondition(NO, error, @"Failed to get output path for screenshots");
+        return KIFTestStepResultFailure;
+    }
+    
+    NSArray *windows = [[UIApplication sharedApplication] windows];
+    if (windows.count == 0) {
+        KIFTestCondition(NO, error, @"Failed to find a window for screenshot");
+        return KIFTestStepResultFailure;
+    }
+    
+    UIGraphicsBeginImageContext([[windows objectAtIndex:0] bounds].size);
+    for (UIWindow *window in windows) {
+        [window.layer renderInContext:UIGraphicsGetCurrentContext()];
+    }
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    outputPath = [outputPath stringByExpandingTildeInPath];
+    outputPath = [outputPath stringByAppendingPathComponent:name];
+    outputPath = [outputPath stringByAppendingPathExtension:@"png"];
+    [UIImagePNGRepresentation(image) writeToFile:outputPath atomically:YES];
+    return KIFTestStepResultSuccess;
+    }];
 }
 
 @end

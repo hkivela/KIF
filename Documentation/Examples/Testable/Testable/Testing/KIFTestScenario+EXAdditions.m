@@ -17,6 +17,7 @@
 {
     KIFTestScenario *scenario = [KIFTestScenario scenarioWithDescription:@"Test that a user can successfully log in."];
     [scenario addStep:[KIFTestStep stepToReset]];
+    [scenario addStep:[KIFTestStep stepToTakeScreenshot:@"screenshot1"]];
     [scenario addStepsFromArray:[KIFTestStep stepsToGoToLoginPage]];
     [scenario addStep:[KIFTestStep stepToEnterText:@"user@example.com" intoViewWithAccessibilityLabel:@"Login User Name"]];
     [scenario addStep:[KIFTestStep stepToEnterText:@"thisismypassword" intoViewWithAccessibilityLabel:@"Login Password"]];
@@ -32,12 +33,20 @@
 {
     KIFTestScenario *scenario = [KIFTestScenario scenarioWithDescription:[NSString stringWithFormat:@"Select the a few different colors."]];
     [scenario addStep:[KIFTestStep stepToTapViewWithAccessibilityLabel:@"Purple"]];
+    [scenario addStep:[KIFTestStep stepToWaitForTimeInterval:1.0 description:@"Wait before screenshot"]];
+    [scenario addStep:[KIFTestStep stepToTakeScreenshot:@"purple"]];
     [scenario addStep:[KIFTestStep stepToTapViewWithAccessibilityLabel:@"Blue"]];
+    [scenario addStep:[KIFTestStep stepToWaitForTimeInterval:1.0 description:@"Wait before screenshot"]];
+    [scenario addStep:[KIFTestStep stepToTakeScreenshot:@"blue"]];
     [scenario addStep:[KIFTestStep stepToTapViewWithAccessibilityLabel:@"Red"]];
+    [scenario addStep:[KIFTestStep stepToWaitForTimeInterval:1.0 description:@"Wait before screenshot"]];
+    [scenario addStep:[KIFTestStep stepToTakeScreenshot:@"red"]];
     [scenario addStep:[KIFTestStep stepToWaitForTimeInterval:5.0 description:@"An arbitrary wait just to demonstrate adding an additional step"]];
     [scenario addStep:[KIFTestStep stepToWaitForViewWithAccessibilityLabel:@"Selected: Red"]];
     
     return scenario;
 }
+
+
 
 @end

@@ -21,4 +21,7 @@
 // Assumes the application was reset and sitting at the welcome screen
 + (NSArray *)stepsToGoToLoginPage;
 
+// Take a screenshot
++ (id)stepToTakeScreenshot:(NSString *)name;
+
 @end
